@@ -5,9 +5,9 @@ import (
 )
 
 type Repository interface {
-	Create(entity *entity.Base) (int64, error)
+	Create(entity *entity.Task) (string, error)
 	FindAll() ([]entity.Task, error)
-	FindBy(entity entity.Base) (entity.Task, error)
-	Update(entity entity.Base, Where entity.Base) (int64, error)
-	Remove(entity entity.Base) (int64, error)
+	FindBy(entity *entity.Task) (entity.Task, error)
+	Update(entity *entity.Task) (string, error)
+	Remove(entity *entity.Task) (string, error)
 }

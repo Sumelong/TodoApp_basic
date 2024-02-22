@@ -42,13 +42,13 @@ func (r *Repository) Create(task *entity.Task) (string, error) {
 
 	_, err = result.RowsAffected()
 	if err != nil {
-		return Guu, err
+		return "", err
 	}
 
 	return task.Id, nil
 }
 
-func (r *Repository) Update(task entity.Task, Where entity.Task) (int64, error) {
+func (r *Repository) Update(task *entity.Task) (string, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -62,7 +62,7 @@ func (r *Repository) Update(task entity.Task, Where entity.Task) (int64, error) 
 	}
 	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 
-	result, err := stmt.Exec(task.Id, task.CreatedAt, task.UpdatedAt, task.Item, task.Done, task.DoneAt, Where)
+	result, err := stmt.Exec(&task.UpdatedAt, &task.Item, &task.Done, &task.DoneAt, &task.Id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,7 +71,13 @@ func (r *Repository) Update(task entity.Task, Where entity.Task) (int64, error) 
 		log.Fatal(err)
 	}
 
-	return result.RowsAffected()
+	_, err = result.RowsAffected()
+	if err != nil {
+		return "", err
+	}
+
+	return task.Id, nil
+
 }
 
 func (r *Repository) FindAll() ([]entity.Task, error) {
@@ -105,7 +111,7 @@ func (r *Repository) FindAll() ([]entity.Task, error) {
 		// Create a new Task instance
 		var task entity.Task
 		// Scan the columns of the current row into the fields of the Task struct
-		if err = rows.Scan(&task.Id, &task.CreatedAt, &task.UpdatedAt, &task.Done, &task.Done, &task.DoneAt); err != nil {
+		if err = rows.Scan(&task.Id, &task.CreatedAt, &task.UpdatedAt, &task.Item, &task.Done, &task.DoneAt); err != nil {
 			return nil, err
 		}
 		// Append the task to the slice
@@ -121,7 +127,7 @@ func (r *Repository) FindAll() ([]entity.Task, error) {
 
 }
 
-func (r *Repository) FindBy(task entity.Task) (entity.Task, error) {
+func (r *Repository) FindBy(where *entity.Task) (task entity.Task, err error) {
 
 	// Initialize a slice to hold tasks
 	var NewTask entity.Task
@@ -138,18 +144,18 @@ func (r *Repository) FindBy(task entity.Task) (entity.Task, error) {
 	}
 	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 
-	row := stmt.QueryRow()
+	row := stmt.QueryRow(&where.Id)
 	if err != nil {
 		log.Fatal(err)
 		return task, err
 	}
 
 	// Scan the columns of the current row into the fields of the Task struct
-	err = row.Scan(&task.Id, &task.CreatedAt, &task.UpdatedAt, &task.Done, &task.Done, &task.DoneAt)
+	err = row.Scan(&task.Id, &task.CreatedAt, &task.UpdatedAt, &task.Item, &task.Done, &task.DoneAt)
 	if err != nil {
 		if errors.Is(sql.ErrNoRows, err) {
 			// Handle case where no rows were returned
-			return NewTask, fmt.Errorf("no task found with ID %d", task.Id)
+			return NewTask, fmt.Errorf("no task found with ID %s", task.Id)
 		}
 		// Handle other errors
 		return NewTask, err
@@ -159,7 +165,7 @@ func (r *Repository) FindBy(task entity.Task) (entity.Task, error) {
 
 }
 
-func (r *Repository) Remove(task entity.Task) (int64, error) {
+func (r *Repository) Remove(task *entity.Task) (string, error) {
 
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -183,5 +189,10 @@ func (r *Repository) Remove(task entity.Task) (int64, error) {
 		log.Fatal(err)
 	}
 
-	return result.RowsAffected()
+	_, err = result.RowsAffected()
+	if err != nil {
+		return "", err
+	}
+
+	return task.Id, nil
 }

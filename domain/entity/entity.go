@@ -1,19 +1,19 @@
 package entity
 
 import (
-	"TodoApp_basic/services"
+	"TodoApp_basic/application/services"
 	"github.com/google/uuid"
 	"time"
 )
 
 type Task struct {
-	Id        uuid.UUID `json:"id,omitempty"`
-	CreatedAt int64     `json:"created_at,omitempty"`
-	UpdatedAt int64     `json:"updated_at,omitempty"`
+	Id        string
+	CreatedAt int64
+	UpdatedAt int64
 
-	Item   string `json:"item,omitempty"`
-	Done   bool   `json:"done,omitempty"`
-	DoneAt int64  `json:"done_at,omitempty"`
+	Item   string
+	Done   bool
+	DoneAt int64
 }
 
 func NewTask(item string, done bool) *Task {
@@ -23,7 +23,7 @@ func NewTask(item string, done bool) *Task {
 	}
 	return &Task{
 
-		Id:        uuid.New(),
+		Id:        uuid.New().String(),
 		CreatedAt: time.Now().Unix(),
 		UpdatedAt: time.Now().Unix(),
 		Item:      services.IsString(item),
@@ -33,6 +33,21 @@ func NewTask(item string, done bool) *Task {
 
 }
 
-func (t *Task) GetID() uuid.UUID {
+func UpdateTask(id string, item string, done bool) *Task {
+	var doneAt int64 = 00000
+	if done {
+		doneAt = time.Now().Unix()
+	}
+	return &Task{
+		Id:        id,
+		UpdatedAt: time.Now().Unix(),
+		Item:      services.IsString(item),
+		Done:      done,
+		DoneAt:    doneAt,
+	}
+
+}
+
+func (t *Task) GetID() string {
 	return t.Id
 }
