@@ -1,4 +1,4 @@
-package services
+package repository
 
 import (
 	"TodoApp_basic/domain/entity"
@@ -22,7 +22,7 @@ func TestRepository_Create(t *testing.T) {
 	//arrange
 	task := entity.NewTask("cook", false)
 	expected := task.GetID()
-	repo := NewRepository(db)
+	repo := NewTaskRepository(db)
 
 	//act
 	res, err := repo.Create(task)
@@ -42,10 +42,10 @@ func TestRepository_FindAll(t *testing.T) {
 	defer tests.TestCleanUp(dsn, db)
 
 	//arrange
-	repo := NewRepository(db)
+	repo := NewTaskRepository(db)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("task-%d", i), false)
+		task := entity.NewTask(fmt.Sprintf("taskservice-%d", i), false)
 		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
@@ -75,10 +75,10 @@ func TestRepository_FindBy(t *testing.T) {
 	defer tests.TestCleanUp(dsn, db)
 
 	//arrange
-	repo := NewRepository(db)
+	repo := NewTaskRepository(db)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("task-%d", i), false)
+		task := entity.NewTask(fmt.Sprintf("taskservice-%d", i), false)
 		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
@@ -106,10 +106,10 @@ func TestRepository_Update(t *testing.T) {
 	defer tests.TestCleanUp(dsn, db)
 
 	//arrange
-	repo := NewRepository(db)
+	repo := NewTaskRepository(db)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("task-%d", i), false)
+		task := entity.NewTask(fmt.Sprintf("taskservice-%d", i), false)
 		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
@@ -144,10 +144,10 @@ func TestRepository_Remove(t *testing.T) {
 	defer tests.TestCleanUp(dsn, db)
 
 	//arrange
-	repo := NewRepository(db)
+	repo := NewTaskRepository(db)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("task-%d", i), false)
+		task := entity.NewTask(fmt.Sprintf("taskservice-%d", i), false)
 		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)

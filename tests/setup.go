@@ -8,14 +8,14 @@ import (
 	"os"
 )
 
-func TestCleanUp(dsn string, db *sql.DB) {
+func TestCleanUp(dns string, db *sql.DB) {
 
 	err := db.Close()
 	if err != nil {
 		log.Print("error closing db")
 	}
 
-	err = os.Remove(dsn)
+	err = os.Remove(dns)
 	if err != nil {
 		log.Print("error removing directory")
 	}

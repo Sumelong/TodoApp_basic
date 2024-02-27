@@ -1,4 +1,4 @@
-package services
+package repository
 
 import (
 	"TodoApp_basic/domain/entity"
@@ -9,15 +9,15 @@ import (
 	"log"
 )
 
-type Repository struct {
+type TaskRepository struct {
 	db *sql.DB
 }
 
-func NewRepository(db *sql.DB) *Repository {
-	return &Repository{db: db}
+func NewTaskRepository(db *sql.DB) *TaskRepository {
+	return &TaskRepository{db: db}
 }
 
-func (r *Repository) Create(task *entity.Task) (string, error) {
+func (r *TaskRepository) Create(task *entity.Task) (string, error) {
 
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -48,7 +48,7 @@ func (r *Repository) Create(task *entity.Task) (string, error) {
 	return task.Id, nil
 }
 
-func (r *Repository) Update(task *entity.Task) (string, error) {
+func (r *TaskRepository) Update(task *entity.Task) (string, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -80,7 +80,7 @@ func (r *Repository) Update(task *entity.Task) (string, error) {
 
 }
 
-func (r *Repository) FindAll() ([]entity.Task, error) {
+func (r *TaskRepository) FindAll() ([]entity.Task, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -114,7 +114,7 @@ func (r *Repository) FindAll() ([]entity.Task, error) {
 		if err = rows.Scan(&task.Id, &task.CreatedAt, &task.UpdatedAt, &task.Item, &task.Done, &task.DoneAt); err != nil {
 			return nil, err
 		}
-		// Append the task to the slice
+		// Append the taskservice to the slice
 		tasks = append(tasks, task)
 	}
 
@@ -127,10 +127,10 @@ func (r *Repository) FindAll() ([]entity.Task, error) {
 
 }
 
-func (r *Repository) FindBy(where *entity.Task) (task entity.Task, err error) {
+func (r *TaskRepository) FindBy(where *entity.Task) (*entity.Task, error) {
 
 	// Initialize a slice to hold tasks
-	var NewTask entity.Task
+	var task entity.Task
 
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -147,7 +147,7 @@ func (r *Repository) FindBy(where *entity.Task) (task entity.Task, err error) {
 	row := stmt.QueryRow(&where.Id)
 	if err != nil {
 		log.Fatal(err)
-		return task, err
+		return &entity.Task{}, err
 	}
 
 	// Scan the columns of the current row into the fields of the Task struct
@@ -155,17 +155,17 @@ func (r *Repository) FindBy(where *entity.Task) (task entity.Task, err error) {
 	if err != nil {
 		if errors.Is(sql.ErrNoRows, err) {
 			// Handle case where no rows were returned
-			return NewTask, fmt.Errorf("no task found with ID %s", task.Id)
+			return &entity.Task{}, fmt.Errorf("no taskservice found with ID %s", task.Id)
 		}
 		// Handle other errors
-		return NewTask, err
+		return &entity.Task{}, err
 	}
 
-	return task, nil
+	return &task, nil
 
 }
 
-func (r *Repository) Remove(task *entity.Task) (string, error) {
+func (r *TaskRepository) Remove(task *entity.Task) (string, error) {
 
 	tx, err := r.db.Begin()
 	if err != nil {

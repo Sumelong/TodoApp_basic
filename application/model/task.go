@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"TodoApp_basic/application/services"
+	"github.com/google/uuid"
+	"time"
+)
 
 type Task struct {
 	Id        string    `json:"id,omitempty"`
@@ -12,13 +16,36 @@ type Task struct {
 	DoneAt time.Time `json:"done_at,omitempty"`
 }
 
-func NewTask(id string, createdAt int64, updatedAt int64, item string, done bool, doneAt int64) *Task {
+func NewTask(item string, done bool) *Task {
+	var doneAt time.Time
+	if done {
+		doneAt = time.Now()
+	}
+	return &Task{
+		Id:        uuid.NewString(),
+		CreatedAt: time.Now(),
+		Item:      services.IsString(item),
+		Done:      done,
+		DoneAt:    doneAt,
+	}
+
+}
+
+func UpdateTask(id string, item string, done bool) *Task {
+	var doneAt time.Time
+	if done {
+		doneAt = time.Now()
+	}
 	return &Task{
 		Id:        id,
-		CreatedAt: time.Unix(createdAt, 0).Local(),
-		UpdatedAt: time.Unix(updatedAt, 0).UTC(),
-		Item:      item,
+		UpdatedAt: time.Now(),
+		Item:      services.IsString(item),
 		Done:      done,
-		DoneAt:    time.Unix(doneAt, 0),
+		DoneAt:    doneAt,
 	}
+
+}
+
+func (t *Task) GetID() string {
+	return t.Id
 }
