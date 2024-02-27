@@ -9,11 +9,11 @@ import (
 func ToModel(entity *entity.Task) *model.Task {
 	return &model.Task{
 		Id:        entity.Id,
-		CreatedAt: time.Unix(entity.CreatedAt, 0).Local(),
-		UpdatedAt: time.Unix(entity.UpdatedAt, 0).Local(),
+		CreatedAt: time.Unix(entity.CreatedAt, 0),
+		UpdatedAt: time.Unix(entity.UpdatedAt, 0),
 		Item:      entity.Item,
 		Done:      entity.Done,
-		DoneAt:    time.Unix(entity.DoneAt, 01).Local(),
+		DoneAt:    time.Unix(entity.DoneAt, 01),
 	}
 }
 

@@ -1,4 +1,4 @@
-package tests
+package testsmockers
 
 import (
 	"database/sql"
@@ -21,9 +21,9 @@ func TestCleanUp(dns string, db *sql.DB) {
 	}
 }
 
-func TestInit() (string, *sql.DB, error) {
+func TestInit() (dsn string, db *sql.DB, err error) {
 
-	dsn := "./test.db" //filepath.Join("./", "test","db")
+	dsn = "./test.db" //filepath.Join("./", "test","db")
 
 	// Check if the database file exists
 	if _, err := os.Stat(dsn); err == nil {
@@ -35,7 +35,7 @@ func TestInit() (string, *sql.DB, error) {
 	}
 
 	// Create a new database with the desired schema
-	db, err := sql.Open("sqlite", dsn)
+	db, err = sql.Open("sqlite", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}

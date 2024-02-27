@@ -4,61 +4,74 @@ import (
 	"TodoApp_basic/application/mapper"
 	"TodoApp_basic/application/model"
 	"TodoApp_basic/domain/contracts"
-	"TodoApp_basic/domain/entity"
-	"database/sql"
 )
 
 type TaskService struct {
-	db   *sql.DB
 	repo contracts.Repository
 }
 
-func NewTaskService(db *sql.DB, repo contracts.Repository) *TaskService {
+func NewTaskService(repo contracts.Repository) *TaskService {
 	return &TaskService{
-		db:   db,
 		repo: repo,
 	}
 }
 
-func (t TaskService) Add(task *model.Task) (string, error) {
+func (t TaskService) Add(mTask *model.Task) (string, error) {
 
-	e := mapper.ModelToEntity(task)
-	id, err := t.repo.Create(e)
+	eTask := mapper.ModelToEntity(mTask)
+	id, err := t.repo.Create(eTask)
 	if err != nil {
 		return "", err
 	}
 	return id, nil
 }
 
-func (t TaskService) Update(task *model.Task) (string, error) {
+func (t TaskService) Update(mTask *model.Task) (string, error) {
 
-	ent := mapper.ModelToEntity(task)
-	id, err := t.repo.Update(ent)
+	eTask := mapper.ModelToEntity(mTask)
+	id, err := t.repo.Update(eTask)
 	if err != nil {
 		return "", err
 	}
 	return id, nil
 }
 
-func (t TaskService) FindAll() ([]entity.Task, error) {
+func (t TaskService) FindAll() ([]model.Task, error) {
 
+	var mTasks []model.Task
 	res, err := t.repo.FindAll()
+
+	for _, en := range res {
+		mTasks = append(mTasks, *mapper.EntityToModel(&en))
+	}
 
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	return mTasks, nil
 }
 
-func (t TaskService) FindOne(task *model.Task) (*model.Task, error) {
+func (t TaskService) FindOne(mTask *model.Task) (*model.Task, error) {
 
-	var m *model.Task
-	e := mapper.ModelToEntity(task)
+	//var mTask *model.Task
+	eTask := mapper.ModelToEntity(mTask)
 
-	res, err := t.repo.FindBy(e)
+	eTask, err := t.repo.FindOne(eTask)
 	if err != nil {
-		return m, err
+		return nil, err
 	}
-	m = mapper.ToModel(res)
-	return m, nil
+	mTask = mapper.EntityToModel(eTask)
+	return mTask, nil
+}
+
+func (t TaskService) Remove(mTask *model.Task) (string, error) {
+	//map model to entity
+	eTask := mapper.ModelToEntity(mTask)
+
+	res, err := t.repo.Remove(eTask)
+	if err != nil {
+		return "", err
+	}
+	mTask = mapper.EntityToModel(eTask)
+	return res, nil
 }

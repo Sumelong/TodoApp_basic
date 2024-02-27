@@ -17,7 +17,7 @@ func NewTaskRepository(db *sql.DB) *TaskRepository {
 	return &TaskRepository{db: db}
 }
 
-func (r *TaskRepository) Create(task *entity.Task) (string, error) {
+func (r *TaskRepository) Create(eTask *entity.Task) (string, error) {
 
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -31,7 +31,7 @@ func (r *TaskRepository) Create(task *entity.Task) (string, error) {
 	}
 	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 
-	result, err := stmt.Exec(task.Id, task.CreatedAt, task.UpdatedAt, task.Item, task.Done, task.DoneAt)
+	result, err := stmt.Exec(eTask.Id, eTask.CreatedAt, eTask.UpdatedAt, eTask.Item, eTask.Done, eTask.DoneAt)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,10 +45,10 @@ func (r *TaskRepository) Create(task *entity.Task) (string, error) {
 		return "", err
 	}
 
-	return task.Id, nil
+	return eTask.Id, nil
 }
 
-func (r *TaskRepository) Update(task *entity.Task) (string, error) {
+func (r *TaskRepository) Update(eTask *entity.Task) (string, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -62,7 +62,7 @@ func (r *TaskRepository) Update(task *entity.Task) (string, error) {
 	}
 	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 
-	result, err := stmt.Exec(&task.UpdatedAt, &task.Item, &task.Done, &task.DoneAt, &task.Id)
+	result, err := stmt.Exec(&eTask.UpdatedAt, &eTask.Item, &eTask.Done, &eTask.DoneAt, &eTask.Id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -76,7 +76,7 @@ func (r *TaskRepository) Update(task *entity.Task) (string, error) {
 		return "", err
 	}
 
-	return task.Id, nil
+	return eTask.Id, nil
 
 }
 
@@ -104,18 +104,18 @@ func (r *TaskRepository) FindAll() ([]entity.Task, error) {
 	defer rows.Close()
 
 	// Initialize a slice to hold tasks
-	var tasks []entity.Task
+	var eTasks []entity.Task
 
 	// Iterate over the result rows
 	for rows.Next() {
 		// Create a new Task instance
-		var task entity.Task
+		var eTask entity.Task
 		// Scan the columns of the current row into the fields of the Task struct
-		if err = rows.Scan(&task.Id, &task.CreatedAt, &task.UpdatedAt, &task.Item, &task.Done, &task.DoneAt); err != nil {
+		if err = rows.Scan(&eTask.Id, &eTask.CreatedAt, &eTask.UpdatedAt, &eTask.Item, &eTask.Done, &eTask.DoneAt); err != nil {
 			return nil, err
 		}
-		// Append the taskservice to the slice
-		tasks = append(tasks, task)
+		// Append the task service to the slice
+		eTasks = append(eTasks, eTask)
 	}
 
 	// Check for errors during iteration
@@ -123,11 +123,11 @@ func (r *TaskRepository) FindAll() ([]entity.Task, error) {
 		return nil, err
 	}
 
-	return tasks, nil
+	return eTasks, nil
 
 }
 
-func (r *TaskRepository) FindBy(where *entity.Task) (*entity.Task, error) {
+func (r *TaskRepository) FindOne(where *entity.Task) (*entity.Task, error) {
 
 	// Initialize a slice to hold tasks
 	var task entity.Task
@@ -165,7 +165,7 @@ func (r *TaskRepository) FindBy(where *entity.Task) (*entity.Task, error) {
 
 }
 
-func (r *TaskRepository) Remove(task *entity.Task) (string, error) {
+func (r *TaskRepository) Remove(eTask *entity.Task) (string, error) {
 
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -180,7 +180,7 @@ func (r *TaskRepository) Remove(task *entity.Task) (string, error) {
 	}
 	defer stmt.Close() // Prepared statements take up server resources and should be closed after use.
 
-	result, err := stmt.Exec(task.Id)
+	result, err := stmt.Exec(eTask.Id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -194,5 +194,5 @@ func (r *TaskRepository) Remove(task *entity.Task) (string, error) {
 		return "", err
 	}
 
-	return task.Id, nil
+	return eTask.Id, nil
 }

@@ -29,6 +29,6 @@ func EntityToModel(entity *entity.Task) *model.Task {
 		UpdatedAt: time.Unix(entity.UpdatedAt, 0),
 		Item:      entity.Item,
 		Done:      entity.Done,
-		DoneAt:    time.Time{},
+		DoneAt:    time.Unix(entity.DoneAt, 0),
 	}
 }
