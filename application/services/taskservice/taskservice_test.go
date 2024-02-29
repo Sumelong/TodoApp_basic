@@ -1,10 +1,10 @@
 package taskservice
 
 import (
+	"TodoApp_basic/app_tests"
 	"TodoApp_basic/application/mapper"
 	"TodoApp_basic/application/model"
 	"TodoApp_basic/domain/entity"
-	"TodoApp_basic/testsmockers"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -13,14 +13,14 @@ import (
 func TestTaskService_Add(t *testing.T) {
 
 	//setup
-	dns, db, err := testsmockers.TestInit()
+	dns, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer testsmockers.TestCleanUp(dns, db)
+	defer app_tests.TestCleanUp(dns, db)
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	taskService := NewTaskService(mockRepo)
 	newTask := model.NewTask("cook", false)
 
@@ -41,14 +41,14 @@ func TestTaskService_Add(t *testing.T) {
 
 func TestTaskService_Update_Item(t *testing.T) {
 	//setup
-	dns, db, err := testsmockers.TestInit()
+	dns, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer testsmockers.TestCleanUp(dns, db)
+	defer app_tests.TestCleanUp(dns, db)
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	taskService := NewTaskService(mockRepo)
 
 	newTask := model.NewTask("cook", false)
@@ -72,14 +72,14 @@ func TestTaskService_Update_Item(t *testing.T) {
 
 func TestTaskService_Update_Done(t *testing.T) {
 	//setup
-	dns, db, err := testsmockers.TestInit()
+	dns, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer testsmockers.TestCleanUp(dns, db)
+	defer app_tests.TestCleanUp(dns, db)
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	taskService := NewTaskService(mockRepo)
 
 	mTask := model.NewTask("cook", false)
@@ -102,14 +102,14 @@ func TestTaskService_Update_Done(t *testing.T) {
 
 func TestTaskService_FindAll(t *testing.T) {
 	//setup
-	dns, db, err := testsmockers.TestInit()
+	dns, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer testsmockers.TestCleanUp(dns, db)
+	defer app_tests.TestCleanUp(dns, db)
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	taskService := NewTaskService(mockRepo)
 
 	var mTasks []model.Task
@@ -141,14 +141,14 @@ func TestTaskService_FindAll(t *testing.T) {
 
 func TestTaskService_FindOne(t *testing.T) {
 	//setup
-	dns, db, err := testsmockers.TestInit()
+	dns, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer testsmockers.TestCleanUp(dns, db)
+	defer app_tests.TestCleanUp(dns, db)
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	//mockRepo :=  repository.NewTaskRepository(db) //new(MockRepository)
 
 	taskService := NewTaskService(mockRepo)
@@ -179,14 +179,14 @@ func TestTaskService_FindOne(t *testing.T) {
 func TestTaskService_Removed(t *testing.T) {
 
 	//setup
-	dns, db, err := testsmockers.TestInit()
+	dns, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer testsmockers.TestCleanUp(dns, db)
+	defer app_tests.TestCleanUp(dns, db)
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	//mockRepo :=  repository.NewTaskRepository(db) //new(MockRepository)
 
 	taskService := NewTaskService(mockRepo)

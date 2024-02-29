@@ -1,4 +1,4 @@
-package testsmockers
+package app_tests
 
 import (
 	"database/sql"

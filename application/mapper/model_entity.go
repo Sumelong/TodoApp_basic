@@ -6,6 +6,14 @@ import (
 	"time"
 )
 
+func ModelToNewEntity(mTask *model.Task) *entity.Task {
+	return entity.NewTask(mTask.Item, mTask.Done)
+}
+
+func ModelToUpdateEntity(mTask *model.Task) *entity.Task {
+	return entity.UpdateTask(mTask.Id, mTask.Item, mTask.Done)
+}
+
 func ModelToEntity(model *model.Task) *entity.Task {
 	var doneAt time.Time
 	if model.Done {

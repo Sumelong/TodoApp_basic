@@ -18,7 +18,7 @@ func NewTaskService(repo contracts.Repository) *TaskService {
 
 func (t TaskService) Add(mTask *model.Task) (string, error) {
 
-	eTask := mapper.ModelToEntity(mTask)
+	eTask := mapper.ModelToNewEntity(mTask)
 	id, err := t.repo.Create(eTask)
 	if err != nil {
 		return "", err
@@ -28,7 +28,7 @@ func (t TaskService) Add(mTask *model.Task) (string, error) {
 
 func (t TaskService) Update(mTask *model.Task) (string, error) {
 
-	eTask := mapper.ModelToEntity(mTask)
+	eTask := mapper.ModelToUpdateEntity(mTask)
 	id, err := t.repo.Update(eTask)
 	if err != nil {
 		return "", err

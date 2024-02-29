@@ -1,18 +1,18 @@
 package repository
 
 import (
+	"TodoApp_basic/app_tests"
 	"TodoApp_basic/domain/entity"
-	"TodoApp_basic/testsmockers"
 	"fmt"
 	"testing"
 )
 
 func BenchmarkTaskRepository_Create(b *testing.B) {
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		b.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	task := entity.NewTask("cook", false)
@@ -29,11 +29,11 @@ func BenchmarkTaskRepository_Create(b *testing.B) {
 
 func BenchmarkTaskRepository_FindAll(b *testing.B) {
 	//setup
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		b.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	repo := NewTaskRepository(db)

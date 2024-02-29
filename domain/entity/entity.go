@@ -25,7 +25,6 @@ func NewTask(item string, done bool) *Task {
 
 		Id:        uuid.New().String(),
 		CreatedAt: time.Now().Unix(),
-		UpdatedAt: time.Now().Unix(),
 		Item:      services.IsString(item),
 		Done:      done,
 		DoneAt:    doneAt,

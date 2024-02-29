@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"TodoApp_basic/app_tests"
 	"TodoApp_basic/domain/entity"
-	"TodoApp_basic/testsmockers"
 	"fmt"
 	"testing"
 
@@ -13,11 +13,11 @@ import (
 func TestRepository_Create(t *testing.T) {
 
 	//setup
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	task := entity.NewTask("cook", false)
@@ -35,11 +35,11 @@ func TestRepository_Create(t *testing.T) {
 
 func TestRepository_FindAll(t *testing.T) {
 	//setup
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	repo := NewTaskRepository(db)
@@ -69,11 +69,11 @@ func TestRepository_FindAll(t *testing.T) {
 /*
 func TestRepository_FindOne(t *testing.T) {
 	//setup
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	repo := NewTaskRepository(db)
@@ -100,11 +100,11 @@ func TestRepository_FindOne(t *testing.T) {
 
 func TestRepository_Update(t *testing.T) {
 	//setup
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	repo := NewTaskRepository(db)
@@ -138,11 +138,11 @@ func TestRepository_Update(t *testing.T) {
 func TestRepository_Remove(t *testing.T) {
 
 	//setup
-	dsn, db, err := testsmockers.TestInit()
+	dsn, db, err := app_tests.TestInit()
 	if err != nil {
 		t.Error(err)
 	}
-	defer testsmockers.TestCleanUp(dsn, db)
+	defer app_tests.TestCleanUp(dsn, db)
 
 	//arrange
 	repo := NewTaskRepository(db)

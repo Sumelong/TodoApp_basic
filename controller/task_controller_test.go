@@ -1,8 +1,8 @@
 package controller
 
 import (
+	"TodoApp_basic/app_tests"
 	"TodoApp_basic/application/model"
-	"TodoApp_basic/testsmockers"
 	"bytes"
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +16,7 @@ func TestTaskController_CreateTaskHandler(t *testing.T) {
 	//setup
 
 	//arrange
-	mockRepo := new(testsmockers.MockRepository)
+	mockRepo := new(app_tests.MockRepository)
 	mockService := NewMockTaskService(mockRepo)
 	ctrl := NewTaskController(mockService)
 
