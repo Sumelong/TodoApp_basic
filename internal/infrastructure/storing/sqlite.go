@@ -1,7 +1,7 @@
 package storing
 
 import (
-	"TodoApp_basic/adapters/logger"
+	"TodoApp_basic/routes/logger"
 	"database/sql"
 	"fmt"
 	"log"
@@ -20,7 +20,7 @@ func NewSqlite(dns string, logger logger.Logger) (db *sql.DB, err error) {
 	}
 	//defer db.Close()
 	if err = createDatabase(db, logger); err != nil {
-		logger.Error("Error creating data store")
+		logger.Error("Error creating data storing")
 	}
 
 	fmt.Println("Database created successfully!")

@@ -1,7 +1,9 @@
 package repository
 
 import (
-	"TodoApp_basic/domain/entity"
+	"TodoApp_basic/internal/adapters/storing"
+	"TodoApp_basic/internal/core/application/services"
+	"TodoApp_basic/internal/core/domain/entity"
 	"TodoApp_basic/tests"
 	"fmt"
 	"testing"
@@ -19,10 +21,16 @@ func TestRepository_Create(t *testing.T) {
 	}
 	defer tests.TestCleanUp(dsn, db)
 
+	qry, err := storing.NewQuery(storing.InstanceSqlite)
+	if err != nil {
+		t.Fatal(err)
+	}
+	id := services.NewId()
+
 	//arrange
-	task := entity.NewTask("cook", false)
-	expected := task.GetID()
-	repo := NewTaskRepository(db)
+	task := entity.NewTask("cook", false, id)
+	expected := id.GetId() //task.GetID()
+	repo := NewTaskRepository(db, *qry)
 
 	//act
 	res, err := repo.Create(task)
@@ -41,11 +49,18 @@ func TestRepository_FindAll(t *testing.T) {
 	}
 	defer tests.TestCleanUp(dsn, db)
 
+	qry, err := storing.NewQuery(storing.InstanceSqlite)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	//arrange
-	repo := NewTaskRepository(db)
+	repo := NewTaskRepository(db, *qry)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("taskaction-%d", i), false)
+		id := services.NewId()
+
+		task := entity.NewTask(fmt.Sprintf("taskusecase-%d", i), false, id)
 		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
@@ -66,7 +81,6 @@ func TestRepository_FindAll(t *testing.T) {
 
 }
 
-/*
 func TestRepository_FindOne(t *testing.T) {
 	//setup
 	dsn, db, err := tests.TestInit()
@@ -75,12 +89,19 @@ func TestRepository_FindOne(t *testing.T) {
 	}
 	defer tests.TestCleanUp(dsn, db)
 
+	qry, err := storing.NewQuery(storing.InstanceSqlite)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	//arrange
-	repo := NewTaskRepository(db)
+	repo := NewTaskRepository(db, *qry)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("taskaction-%d", i), false)
-		_, err = repo.Create(*task)
+		id := services.NewId()
+
+		task := entity.NewTask(fmt.Sprintf("taskusecase-%d", i), false, id)
+		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
 		}
@@ -106,12 +127,19 @@ func TestRepository_Update(t *testing.T) {
 	}
 	defer tests.TestCleanUp(dsn, db)
 
+	qry, err := storing.NewQuery(storing.InstanceSqlite)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	//arrange
-	repo := NewTaskRepository(db)
+	repo := NewTaskRepository(db, *qry)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("taskaction-%d", i), false)
-		_, err = repo.Create(*task)
+		id := services.NewId()
+
+		task := entity.NewTask(fmt.Sprintf("taskusecase-%d", i), false, id)
+		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
 		}
@@ -119,7 +147,7 @@ func TestRepository_Update(t *testing.T) {
 	}
 
 	//act
-	//Where := entity.Task{Id: tasks[0].Id}
+	//Where := entity.Task{NewId: tasks[0].NewId}
 	newTask := entity.UpdateTask(tasks[0].Id, "newTask", true)
 	res, err := repo.Update(newTask)
 
@@ -144,12 +172,19 @@ func TestRepository_Remove(t *testing.T) {
 	}
 	defer tests.TestCleanUp(dsn, db)
 
+	qry, err := storing.NewQuery(storing.InstanceSqlite)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	//arrange
-	repo := NewTaskRepository(db)
+	repo := NewTaskRepository(db, *qry)
 	var tasks []entity.Task
 	for i := 0; i < 10; i++ {
-		task := entity.NewTask(fmt.Sprintf("taskaction-%d", i), false)
-		_, err = repo.Create(*task)
+		id := services.NewId()
+
+		task := entity.NewTask(fmt.Sprintf("taskusecase-%d", i), false, id)
+		_, err = repo.Create(task)
 		if err != nil {
 			t.Error(err)
 		}
@@ -167,4 +202,3 @@ func TestRepository_Remove(t *testing.T) {
 	assert.Empty(t, updated)
 
 }
-*/

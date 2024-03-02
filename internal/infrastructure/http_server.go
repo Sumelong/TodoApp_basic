@@ -1,10 +1,10 @@
 package infrastructure
 
 import (
-	"TodoApp_basic/adapters/logger"
 	"TodoApp_basic/infrastructure/logging"
 	"TodoApp_basic/infrastructure/router"
 	"TodoApp_basic/infrastructure/storing"
+	"TodoApp_basic/routes/logger"
 	"database/sql"
 	"strconv"
 	"time"
@@ -47,10 +47,10 @@ func (c *Config) Logger(instance int) *Config {
 func (c *Config) SqlStore(instance int, dns string, log logger.Logger) *Config {
 	db, err := storing.NewStoreFactory(instance, dns, log)
 	if err != nil {
-		c.logger.Error("Failed to connect to SQL data store", err)
+		c.logger.Error("Failed to connect to SQL data storing", err)
 	}
 
-	c.logger.Info("Successfully connected to the SQL data store")
+	c.logger.Info("Successfully connected to the SQL data storing")
 
 	c.sqlStore = db
 	return c

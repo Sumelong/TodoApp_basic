@@ -1,9 +1,11 @@
 package logging
 
 import (
-	"TodoApp_basic/adapters/logger"
+	"TodoApp_basic/internal/core/application/ports/logger"
+	"TodoApp_basic/internal/core/application/services/makedirectory"
 	"errors"
 	"log"
+	"path/filepath"
 )
 
 const (
@@ -16,7 +18,15 @@ var (
 )
 
 func NewLoggerFactory(instance int) (logger.Logger, error) {
-	loggingFile, err := openLogFile("./logs.log")
+
+	path := filepath.Join("logs")
+
+	err := makedirectory.Create(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	loggingFile, err := openLogFile("logs/logs.log")
 	if err != nil {
 		log.Fatal(err)
 	}

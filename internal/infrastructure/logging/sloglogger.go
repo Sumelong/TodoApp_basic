@@ -1,7 +1,7 @@
 package logging
 
 import (
-	"TodoApp_basic/adapters/logger"
+	"TodoApp_basic/internal/core/application/ports/logger"
 	"log/slog"
 	"os"
 )

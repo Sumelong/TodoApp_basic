@@ -1,7 +1,7 @@
 package router
 
 import (
-	"TodoApp_basic/adapters/logger"
+	"TodoApp_basic/routes/logger"
 	"database/sql"
 	"time"
 )

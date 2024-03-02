@@ -1,7 +1,7 @@
 package model
 
 import (
-	"TodoApp_basic/application/usecase"
+	"TodoApp_basic/internal/core/application/services"
 	"github.com/google/uuid"
 	"time"
 )
@@ -24,7 +24,7 @@ func NewTask(item string, done bool) *Task {
 	return &Task{
 		Id:        uuid.NewString(),
 		CreatedAt: time.Now(),
-		Item:      usecase.IsString(item),
+		Item:      services.IsString(item),
 		Done:      done,
 		DoneAt:    doneAt,
 	}
@@ -39,13 +39,9 @@ func UpdateTask(id string, item string, done bool) *Task {
 	return &Task{
 		Id:        id,
 		UpdatedAt: time.Now(),
-		Item:      usecase.IsString(item),
+		Item:      services.IsString(item),
 		Done:      done,
 		DoneAt:    doneAt,
 	}
 
-}
-
-func (t *Task) GetID() string {
-	return t.Id
 }

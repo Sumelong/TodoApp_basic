@@ -1,11 +1,11 @@
 package router
 
 import (
-	"TodoApp_basic/adapters/logger"
-	"TodoApp_basic/adapters/usecase"
 	"TodoApp_basic/application/usecase/taskaction"
 	"TodoApp_basic/controller"
 	"TodoApp_basic/domain/repository"
+	"TodoApp_basic/routes/logger"
+	"TodoApp_basic/routes/usecase"
 	"database/sql"
 	"net/http"
 	"time"
